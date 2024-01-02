@@ -3,10 +3,6 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const { db } = locals;
-	const { authStore } = db;
-
-	// @ts-expect-error something weird with model type not recognizing id
-	const { id } = authStore.model;
 
 	const workout = await db.collection('workout').getList();
 
@@ -14,7 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions = {
-	'add-workout': async ({ locals, request }) => {
+	add: async ({ locals, request }) => {
 		const { db } = locals;
 		// @ts-expect-error id missing on types for AuthModel
 		const { id } = db.authStore.model;
@@ -26,5 +22,13 @@ export const actions = {
 			name,
 			user: id
 		});
+	},
+	delete: async ({ locals, request }) => {
+		const { db } = locals;
+
+		const data = await request.formData();
+		const workoutId = data.get('workout-id') as string;
+
+		await db.collection('workout').delete(workoutId);
 	}
 } satisfies Actions;

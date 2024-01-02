@@ -1,40 +1,28 @@
 <script lang="ts">
+	import AddLift from './AddLift.svelte';
+	import AllLifts from './AllLifts.svelte';
 	export let data;
 </script>
 
 <a href="/">back</a>
-<h1>Workout: {data.name}</h1>
+<h1>Workout: {new Date(data.created).toLocaleString('en-US')}</h1>
+
 <h2>Warmup</h2>
-<form action="?/warmup" method="POST">
-	<label>Name <input type="text" name="name" /> </label>
-	<label>Repitions <input type="number" name="reps" /> </label>
-	<label>Sets <input type="number" name="sets" /> </label>
-	<label>Weight <input type="number" name="weight" /> </label>
-	<label>Duration <input type="number" name="duration" /> </label>
-	<button type="submit">Add Lift</button>
-</form>
-{#if data.expand}
-	{#each data.expand.warmup as warmup}
-		<div class="lift">
-			<p>name: {warmup.name}</p>
-			<p>reps: {warmup.reps}</p>
-			<p>sets: {warmup.sets}</p>
-			<p>weight: {warmup.weight}</p>
-			<p>duration: {warmup.duration}</p>
-		</div>
-	{/each}
-{/if}
+
+<AddLift section="warmup" />
+<AllLifts lifts={data.expand?.warmup} section="warmup" />
+
 <h2>Session</h2>
+
+<AddLift section="session" />
+<AllLifts lifts={data.expand?.session} section="session" />
+
 <h2>Core</h2>
+
+<AddLift section="core" />
+<AllLifts lifts={data.expand?.core} section="core" />
+
 <h2>Cooldown</h2>
 
-<style>
-	.lift {
-		display: flex;
-		flex-direction: row;
-
-		justify-content: space-between;
-
-        margin: .5rem
-	}
-</style>
+<AddLift section="cooldown" />
+<AllLifts lifts={data.expand?.cooldown} section="cooldown" />
